@@ -140,7 +140,7 @@ Both data clients are fully async, retry with exponential backoff, and cache agg
 ### 1. Clone & install
 
 ```bash
-git clone https://github.com/<your-username>/pitwall-ai.git
+git clone https://github.com/rohan-chandrashekar/pitwall-ai.git
 cd pitwall-ai
 
 python -m venv .venv
