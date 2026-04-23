@@ -1,0 +1,52 @@
+version: "3.8"
+
+services:
+  influxdb:
+    image: influxdb:2.7
+    container_name: pitwall-influxdb
+    ports:
+      - "8086:8086"
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: admin
+      DOCKER_INFLUXDB_INIT_PASSWORD: pitwall-password
+      DOCKER_INFLUXDB_INIT_ORG: pitwall
+      DOCKER_INFLUXDB_INIT_BUCKET: f1
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: pitwall-token
+    volumes:
+      - influxdb-data:/var/lib/influxdb2
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:10.2.0
+    container_name: pitwall-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: pitwall
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /var/lib/grafana/dashboards/pitwall.json
+      GF_RENDERING_SERVER_URL: http://renderer:8081/render
+      GF_RENDERING_CALLBACK_URL: http://grafana:3000/
+      GF_LOG_FILTERS: rendering:debug
+    volumes:
+      - ./grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
+      - ./grafana/dashboard-provider.yml:/etc/grafana/provisioning/dashboards/dashboard-provider.yml
+      - ./grafana/dashboard.json:/var/lib/grafana/dashboards/pitwall.json
+      - grafana-data:/var/lib/grafana
+    depends_on:
+      - influxdb
+    restart: unless-stopped
+
+  renderer:
+    image: grafana/grafana-image-renderer:3.11.5
+    container_name: pitwall-renderer
+    ports:
+      - "8081:8081"
+    environment:
+      ENABLE_METRICS: "false"
+    restart: unless-stopped
+
+volumes:
+  influxdb-data:
+  grafana-data:

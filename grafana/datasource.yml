@@ -1,0 +1,15 @@
+apiVersion: 1
+
+datasources:
+  - name: InfluxDB
+    uid: pitwall-influxdb
+    type: influxdb
+    access: proxy
+    url: http://influxdb:8086
+    jsonData:
+      version: Flux
+      organization: pitwall
+      defaultBucket: f1
+    secureJsonData:
+      token: pitwall-token
+    isDefault: true

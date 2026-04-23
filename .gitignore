@@ -1,0 +1,24 @@
+# Secrets
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.venv/
+
+# IDE / local tooling
+.vscode/
+.idea/
+.claude/
+
+# Caches
+.fastf1_cache/
+.pytest_cache/
+
+# OS
+.DS_Store
+Thumbs.db

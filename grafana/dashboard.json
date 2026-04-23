@@ -1,0 +1,2226 @@
+{
+  "annotations": {
+    "list": []
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "liveNow": true,
+  "refresh": "2s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": [
+    "f1",
+    "pitwall",
+    "strategy"
+  ],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-24h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "PitWall-AI \u00b7 Race Strategy Dashboard",
+  "uid": "pitwall-f1",
+  "version": 59,
+  "panels": [
+    {
+      "type": "row",
+      "title": "\ud83c\udfc1 Session",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "panels": [],
+      "id": 1
+    },
+    {
+      "title": "Circuit",
+      "type": "stat",
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 0,
+        "y": 1
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "pitwall-influxdb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#E10600"
+          },
+          "unit": "none",
+          "noValue": "\u2014"
+        }
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value",
+        "wideLayout": true,
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/.*[Vv]alue.*/",
+          "values": false
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "from(bucket: \"f1\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"session_info\" and r._field == \"total_laps\")\n  |> group()\n  |> sort(columns: [\"_time\"], desc: true)\n  |> limit(n: 1)\n  |> map(fn: (r) => ({\n      _time: r._time,\n      _value:\n        if r.track == \"Melbourne\" then \"\ud83c\udde6\ud83c\uddfa Melbourne, Australia \u00b7 R1\"\n        else if r.track == \"Shanghai\" then \"\ud83c\udde8\ud83c\uddf3 Shanghai, China \u00b7 R2\"\n        else if r.track == \"Suzuka\" then \"\ud83c\uddef\ud83c\uddf5 Suzuka, Japan \u00b7 R3\"\n        else if r.track == \"Sakhir\" then \"\ud83c\udde7\ud83c\udded Sakhir, Bahrain \u00b7 R4\"\n        else if r.track == \"Jeddah\" then \"\ud83c\uddf8\ud83c\udde6 Jeddah, Saudi Arabia \u00b7 R5\"\n        else if r.track == \"Miami\" then \"\ud83c\uddfa\ud83c\uddf8 Miami, USA \u00b7 R6\"\n        else if r.track == \"Imola\" then \"\ud83c\uddee\ud83c\uddf9 Imola, Italy \u00b7 R7\"\n        else if r.track == \"Monte Carlo\" then \"\ud83c\uddf2\ud83c\udde8 Monaco \u00b7 R8\"\n        else if r.track == \"Monaco\" then \"\ud83c\uddf2\ud83c\udde8 Monaco \u00b7 R8\"\n        else if r.track == \"Barcelona\" then \"\ud83c\uddea\ud83c\uddf8 Barcelona, Spain \u00b7 R9\"\n        else if r.track == \"Catalunya\" then \"\ud83c\uddea\ud83c\uddf8 Catalunya, Spain \u00b7 R9\"\n        else if r.track == \"Montreal\" then \"\ud83c\udde8\ud83c\udde6 Montreal, Canada \u00b7 R10\"\n        else if r.track == \"Spielberg\" then \"\ud83c\udde6\ud83c\uddf9 Spielberg, Austria \u00b7 R11\"\n        else if r.track == \"Silverstone\" then \"\ud83c\uddec\ud83c\udde7 Silverstone, UK \u00b7 R12\"\n        else if r.track == \"Spa-Francorchamps\" then \"\ud83c\udde7\ud83c\uddea Spa, Belgium \u00b7 R13\"\n        else if r.track == \"Budapest\" then \"\ud83c\udded\ud83c\uddfa Budapest, Hungary \u00b7 R14\"\n        else if r.track == \"Zandvoort\" then \"\ud83c\uddf3\ud83c\uddf1 Zandvoort, Netherlands \u00b7 R15\"\n        else if r.track == \"Monza\" then \"\ud83c\uddee\ud83c\uddf9 Monza, Italy \u00b7 R16\"\n        else if r.track == \"Baku\" then \"\ud83c\udde6\ud83c\uddff Baku, Azerbaijan \u00b7 R17\"\n        else if r.track == \"Singapore\" then \"\ud83c\uddf8\ud83c\uddec Singapore \u00b7 R18\"\n        else if r.track == \"Austin\" then \"\ud83c\uddfa\ud83c\uddf8 Austin, USA \u00b7 R19\"\n        else if r.track == \"Mexico City\" then \"\ud83c\uddf2\ud83c\uddfd Mexico City, Mexico \u00b7 R20\"\n        else if r.track == \"S\u00e3o Paulo\" then \"\ud83c\udde7\ud83c\uddf7 S\u00e3o Paulo, Brazil \u00b7 R21\"\n        else if r.track == \"Sao Paulo\" then \"\ud83c\udde7\ud83c\uddf7 S\u00e3o Paulo, Brazil \u00b7 R21\"\n        else if r.track == \"Las Vegas\" then \"\ud83c\uddfa\ud83c\uddf8 Las Vegas, USA \u00b7 R22\"\n        else if r.track == \"Lusail\" then \"\ud83c\uddf6\ud83c\udde6 Lusail, Qatar \u00b7 R23\"\n        else if r.track == \"Yas Marina\" then \"\ud83c\udde6\ud83c\uddea Yas Marina, UAE \u00b7 R24\"\n        else r.track\n    }))\n  |> keep(columns: [\"_time\", \"_value\"])"
+        }
+      ],
+      "id": 2
+    },
+    {
+      "title": "Driver",
+      "type": "stat",
+      "gridPos": {
+        "h": 4,
+        "w": 5,
+        "x": 8,
+        "y": 1
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "pitwall-influxdb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#1E90FF"
+          },
+          "unit": "none",
+          "noValue": "\u2014"
+        }
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value",
+        "wideLayout": true,
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/.*[Vv]alue.*/",
+          "values": false
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "from(bucket: \"f1\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"session_info\" and r._field == \"driver_code\")\n  |> group()\n  |> sort(columns: [\"_time\"], desc: true)\n  |> limit(n: 1)\n  |> keep(columns: [\"_time\", \"_value\"])"
+        }
+      ],
+      "id": 3
+    },
+    {
+      "title": "Date",
+      "type": "stat",
+      "gridPos": {
+        "h": 4,
+        "w": 5,
+        "x": 13,
+        "y": 1
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "pitwall-influxdb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#6B7280"
+          },
+          "unit": "none",
+          "noValue": "\u2014"
+        }
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value",
+        "wideLayout": true,
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/.*[Vv]alue.*/",
+          "values": false
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "from(bucket: \"f1\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"session_info\" and r._field == \"session_date\")\n  |> group()\n  |> sort(columns: [\"_time\"], desc: true)\n  |> limit(n: 1)\n  |> keep(columns: [\"_time\", \"_value\"])"
+        }
+      ],
+      "id": 4
+    },
+    {
+      "title": "Total Laps",
+      "type": "stat",
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 18,
+        "y": 1
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "pitwall-influxdb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#FFD700"
+          },
+          "unit": "none",
+          "noValue": "\u2014"
+        }
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value",
+        "wideLayout": true,
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "from(bucket: \"f1\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"session_info\" and r._field == \"total_laps\")\n  |> group()\n  |> sort(columns: [\"_time\"], desc: true)\n  |> limit(n: 1)\n  |> keep(columns: [\"_value\"])"
+        }
+      ],
+      "id": 5
+    },
+    {
+      "title": "Flag",
+      "type": "stat",
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 21,
+        "y": 1
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "pitwall-influxdb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "GREEN": {
+                  "color": "green",
+                  "index": 0,
+                  "text": "\ud83d\udfe2 GREEN"
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "SC": {
+                  "color": "yellow",
+                  "index": 1,
+                  "text": "\ud83d\udfe1 SC"
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "VSC": {
+                  "color": "orange",
+                  "index": 2,
+                  "text": "\ud83d\udfe0 VSC"
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "RED": {
+                  "color": "red",
+                  "index": 3,
+                  "text": "\ud83d\udd34 RED"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "noValue": "\u2014"
+        }
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/.*[Vv]alue.*/",
+          "values": false
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "from(bucket: \"f1\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"race_flag\" and r._field == \"flag\")\n  |> group()\n  |> sort(columns: [\"_time\"], desc: true)\n  |> limit(n: 1)\n  |> keep(columns: [\"_time\", \"_value\"])"
+        }
+      ],
+      "id": 6
+    },
+    {
+      "type": "row",
+      "title": "\ud83d\udcca Live Race Status",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 5
+      },
+      "panels": [],
+      "id": 7
+    },
+    {
+      "title": "Lap",
+      "type": "stat",
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 6
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "pitwall-influxdb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#9CA3AF"
+          },
+          "unit": "none",
+          "decimals": 0,
+          "noValue": "\u2014"
+        }
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "textMode": "value",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "from(bucket: \"f1\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"driver_state\" and r._field == \"lap\")\n  |> group()\n  |> sort(columns: [\"_time\"], desc: true)\n  |> limit(n: 1)\n  |> keep(columns: [\"_time\", \"_value\"])"
+        }
+      ],
+      "id": 8
+    },
+    {
+      "title": "Position",
+      "type": "stat",
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 4,
+        "y": 6
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "pitwall-influxdb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 4
+              },
+              {
+                "color": "orange",
+                "value": 8
+              },
+              {
+                "color": "red",
+                "value": 11
+              }
+            ]
+          },
+          "unit": "none",
+          "decimals": 0,
+          "noValue": "\u2014"
+        }
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "textMode": "value",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "from(bucket: \"f1\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"position\" and r._field == \"position\")\n  |> group()\n  |> sort(columns: [\"_time\"], desc: true)\n  |> limit(n: 1)\n  |> keep(columns: [\"_time\", \"_value\"])"
+        }
+      ],
+      "id": 9
+    },
+    {
+      "title": "Ghost \u0394 (AI vs Actual)",
+      "description": "Positive (green) = AI strategy would be faster. Negative (red) = actual faster.",
+      "type": "stat",
+      "gridPos": {
+        "h": 4,
+        "w": 7,
+        "x": 8,
+        "y": 6
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "pitwall-influxdb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": -1
+              },
+              {
+                "color": "green",
+                "value": 0.1
+              }
+            ]
+          },
+          "unit": "s",
+          "decimals": 1,
+          "noValue": "0.0"
+        }
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "textMode": "value",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "from(bucket: \"f1\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"ghost_delta\" and r._field == \"cumulative_delta\")\n  |> group()\n  |> sort(columns: [\"_time\"], desc: true)\n  |> limit(n: 1)\n  |> keep(columns: [\"_time\", \"_value\"])"
+        }
+      ],
+      "id": 10
+    },
+    {
+      "title": "Compound",
+      "type": "stat",
+      "gridPos": {
+        "h": 4,
+        "w": 5,
+        "x": 15,
+        "y": 6
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "pitwall-influxdb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "SOFT": {
+                  "color": "#FF1E1E",
+                  "index": 0,
+                  "text": "\ud83d\udd34 SOFT"
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "MEDIUM": {
+                  "color": "#FFD700",
+                  "index": 1,
+                  "text": "\ud83d\udfe1 MEDIUM"
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "HARD": {
+                  "color": "#E5E7EB",
+                  "index": 2,
+                  "text": "\u26aa HARD"
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "INTERMEDIATE": {
+                  "color": "#10B981",
+                  "index": 3,
+                  "text": "\ud83d\udfe2 INTER"
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "WET": {
+                  "color": "#3B82F6",
+                  "index": 4,
+                  "text": "\ud83d\udd35 WET"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          },
+          "noValue": "\u2014"
+        }
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/.*[Vv]alue.*/",
+          "values": false
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "from(bucket: \"f1\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"driver_state\" and r._field == \"compound\")\n  |> group()\n  |> sort(columns: [\"_time\"], desc: true)\n  |> limit(n: 1)\n  |> keep(columns: [\"_time\", \"_value\"])"
+        }
+      ],
+      "id": 11
+    },
+    {
+      "title": "Tire Age",
+      "type": "stat",
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 20,
+        "y": 6
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "pitwall-influxdb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 15
+              },
+              {
+                "color": "orange",
+                "value": 25
+              },
+              {
+                "color": "red",
+                "value": 35
+              }
+            ]
+          },
+          "unit": "none",
+          "decimals": 0,
+          "noValue": "\u2014"
+        }
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "textMode": "value",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "from(bucket: \"f1\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"driver_state\" and r._field == \"tire_age\")\n  |> group()\n  |> sort(columns: [\"_time\"], desc: true)\n  |> limit(n: 1)\n  |> keep(columns: [\"_time\", \"_value\"])"
+        }
+      ],
+      "id": 12
+    },
+    {
+      "type": "row",
+      "title": "\ud83c\udfce\ufe0f AI Strategy vs Reality",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 10
+      },
+      "panels": [],
+      "id": 13
+    },
+    {
+      "title": "Ghost Car Delta \u2014 Cumulative Time Saved by AI",
+      "description": "How much time the AI's strategy would have saved (green) or cost (red) compared to what actually happened.",
+      "type": "xychart",
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 11
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "pitwall-influxdb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "show": "lines",
+            "pointSize": {
+              "fixed": 5
+            },
+            "lineWidth": 2,
+            "fillOpacity": 15,
+            "axisPlacement": "auto",
+            "axisColorMode": "text",
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "axisCenteredZero": false,
+            "hideFrom": {
+              "tooltip": false,
+              "viz": false,
+              "legend": false
+            }
+          },
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "green"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "lap"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "displayName",
+                "value": "Lap"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "Lap"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "cumulative_delta"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "s"
+              },
+              {
+                "id": "displayName",
+                "value": "Cumulative \u0394"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "Cumulative \u0394 (seconds)"
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "mapping": "manual",
+        "series": [
+          {
+            "x": {
+              "matcher": {
+                "id": "byName",
+                "options": "lap"
+              }
+            },
+            "y": {
+              "matcher": {
+                "id": "byName",
+                "options": "cumulative_delta"
+              }
+            },
+            "name": {
+              "fixed": "AI vs Actual"
+            }
+          }
+        ],
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "cumulative = from(bucket: \"f1\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"ghost_delta\" and r._field == \"cumulative_delta\")\n  |> group()\n  |> keep(columns: [\"_time\", \"_value\", \"driver\"])\n  |> rename(columns: {_value: \"cumulative_delta\"})\nlaps = from(bucket: \"f1\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"ghost_delta\" and r._field == \"lap\")\n  |> group()\n  |> keep(columns: [\"_time\", \"_value\", \"driver\"])\n  |> rename(columns: {_value: \"lap\"})\njoin(tables: {c: cumulative, l: laps}, on: [\"_time\", \"driver\"])\n  |> group(columns: [\"lap\"])\n  |> last(column: \"cumulative_delta\")\n  |> group()\n  |> sort(columns: [\"lap\"])\n  |> map(fn: (r) => ({ lap: r.lap, cumulative_delta: r.cumulative_delta }))"
+        }
+      ],
+      "id": 14,
+      "transformations": []
+    },
+    {
+      "title": "\ud83d\udcfb AI Race Engineer \u2014 Radio Briefings",
+      "description": "Messages from the AI strategist over the race.",
+      "type": "logs",
+      "gridPos": {
+        "h": 22,
+        "w": 24,
+        "x": 0,
+        "y": 20
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "pitwall-influxdb"
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": false,
+        "prettifyLogMessage": false,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "showTime": false,
+        "sortOrder": "Ascending",
+        "wrapLogMessage": true
+      },
+      "transformations": [],
+      "targets": [
+        {
+          "refId": "A",
+          "query": "latest = from(bucket: \"f1\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"briefing\" and r._field == \"text\")\n  |> group()\n  |> sort(columns: [\"_time\"], desc: true)\n  |> limit(n: 1)\n  |> findRecord(fn: (key) => true, idx: 0)\nrunStartRec = from(bucket: \"f1\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"briefing\" and r._field == \"lap\" and r._value == 1.0 and r.driver == latest.driver and r.track == latest.track)\n  |> group()\n  |> sort(columns: [\"_time\"], desc: true)\n  |> limit(n: 1)\n  |> findRecord(fn: (key) => true, idx: 0)\nfrom(bucket: \"f1\")\n  |> range(start: runStartRec._time)\n  |> filter(fn: (r) => r._measurement == \"briefing\" and r.driver == latest.driver and r.track == latest.track)\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> sort(columns: [\"lap\"], desc: false)\n  |> map(fn: (r) => ({ _time: r._time, _value: \"\u2501\u2501\u2501\u2501\u2501  LAP \" + string(v: int(v: r.lap)) + \"  \u2501\u2501\u2501\u2501\u2501   \" + r.text }))"
+        }
+      ],
+      "id": 15
+    },
+    {
+      "type": "row",
+      "title": "\ud83c\udfc1 Race Positions",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 36
+      },
+      "panels": [],
+      "id": 16
+    },
+    {
+      "title": "Position Battle - You vs Rivals (by Lap)",
+      "description": "Track position over the race. Lower = better.",
+      "type": "xychart",
+      "gridPos": {
+        "h": 9,
+        "w": 14,
+        "x": 0,
+        "y": 37
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "pitwall-influxdb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "show": "lines",
+            "pointSize": {
+              "fixed": 6
+            },
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "axisPlacement": "auto",
+            "axisColorMode": "text",
+            "axisLabel": "Position",
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "axisCenteredZero": false,
+            "hideFrom": {
+              "tooltip": false,
+              "viz": false,
+              "legend": false
+            },
+            "axisSoftMin": 1,
+            "axisSoftMax": 20
+          },
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "min": 1,
+          "max": 20,
+          "decimals": 0,
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "lap"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "displayName",
+                "value": "Lap"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "Lap"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              },
+              {
+                "id": "min",
+                "value": null
+              },
+              {
+                "id": "max",
+                "value": null
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "mapping": "auto",
+        "series": [],
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "latest = from(bucket: \"f1\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"briefing\" and r._field == \"text\")\n  |> group()\n  |> sort(columns: [\"_time\"], desc: true)\n  |> limit(n: 1)\n  |> findRecord(fn: (key) => true, idx: 0)\nrunStartRec = from(bucket: \"f1\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"briefing\" and r._field == \"lap\" and r._value == 1.0 and r.driver == latest.driver and r.track == latest.track)\n  |> group()\n  |> sort(columns: [\"_time\"], desc: true)\n  |> limit(n: 1)\n  |> findRecord(fn: (key) => true, idx: 0)\nuser = from(bucket: \"f1\")\n  |> range(start: runStartRec._time)\n  |> filter(fn: (r) => r._measurement == \"position\" and r.driver == latest.driver and r.track == latest.track)\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> group(columns: [\"lap\"])\n  |> last(column: \"position\")\n  |> group()\n  |> map(fn: (r) => ({ lap: r.lap, driver: latest.driver, position: r.position }))\nrivals = from(bucket: \"f1\")\n  |> range(start: runStartRec._time)\n  |> filter(fn: (r) => r._measurement == \"rival_position\" and r.driver == latest.driver and r.track == latest.track)\n  |> pivot(rowKey: [\"_time\", \"opponent\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> group(columns: [\"opponent\", \"lap\"])\n  |> last(column: \"position\")\n  |> group()\n  |> map(fn: (r) => ({ lap: r.lap, driver: r.opponent, position: r.position }))\nunion(tables: [user, rivals])\n  |> pivot(rowKey: [\"lap\"], columnKey: [\"driver\"], valueColumn: \"position\")\n  |> sort(columns: [\"lap\"])"
+        }
+      ],
+      "id": 17,
+      "transformations": []
+    },
+    {
+      "title": "Nearest Rivals",
+      "description": "Drivers immediately around us, their compound, tire age, gap, and predicted pit lap.",
+      "type": "table",
+      "gridPos": {
+        "h": 9,
+        "w": 10,
+        "x": 14,
+        "y": 37
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "pitwall-influxdb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "center",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false,
+            "filterable": false
+          },
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Driver"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 80
+              },
+              {
+                "id": "custom.align",
+                "value": "left"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "P"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 50
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Tire"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 110
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Age"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 60
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Lap"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 55
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Gap (s)"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 75
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              },
+              {
+                "id": "unit",
+                "value": "s"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Pit %"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 70
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              },
+              {
+                "id": "unit",
+                "value": "percentunit"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Est. Pit Lap"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 90
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm",
+        "footer": {
+          "show": false,
+          "reducer": [
+            "sum"
+          ],
+          "countRows": false,
+          "fields": ""
+        },
+        "sortBy": [
+          {
+            "displayName": "P",
+            "desc": false
+          }
+        ]
+      },
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {
+              "opponent": 0,
+              "position": 1,
+              "compound": 2,
+              "tire_age": 3,
+              "lap": 4,
+              "gap_seconds": 5,
+              "pit_probability": 6,
+              "predicted_pit_lap": 7
+            },
+            "renameByName": {
+              "opponent": "Driver",
+              "position": "P",
+              "compound": "Tire",
+              "tire_age": "Age",
+              "lap": "Lap",
+              "gap_seconds": "Gap (s)",
+              "pit_probability": "Pit %",
+              "predicted_pit_lap": "Est. Pit Lap"
+            }
+          }
+        }
+      ],
+      "targets": [
+        {
+          "refId": "A",
+          "query": "latest = from(bucket: \"f1\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"briefing\" and r._field == \"text\")\n  |> group()\n  |> sort(columns: [\"_time\"], desc: true)\n  |> limit(n: 1)\n  |> findRecord(fn: (key) => true, idx: 0)\nfrom(bucket: \"f1\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"spy_intel\" and r.driver == latest.driver and r.track == latest.track)\n  |> last()\n  |> pivot(rowKey: [\"opponent\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> group()\n  |> keep(columns: [\"opponent\",\"position\",\"lap\",\"compound\",\"gap_seconds\",\"tire_age\",\"pit_probability\",\"predicted_pit_lap\"])\n  |> sort(columns: [\"position\"])"
+        }
+      ],
+      "id": 18
+    },
+    {
+      "type": "row",
+      "title": "\u23f1\ufe0f Lap Times & Tire Strategy",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 38
+      },
+      "panels": [],
+      "id": 19
+    },
+    {
+      "title": "Tire Allocation",
+      "description": "Compounds available pre-race.",
+      "type": "bargauge",
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 39
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "pitwall-influxdb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none",
+          "min": 0,
+          "max": 8,
+          "decimals": 0
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "SOFT"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#FF1E1E"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "MEDIUM"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#FFD700"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "HARD"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "#E5E7EB"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "showUnfilled": true,
+        "valueMode": "text",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "sessionStart = from(bucket: \"f1\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"session_info\" and r._field == \"driver_code\")\n  |> group()\n  |> sort(columns: [\"_time\"], desc: true)\n  |> limit(n: 1)\n  |> findRecord(fn: (key) => true, idx: 0)\n\nfrom(bucket: \"f1\")\n  |> range(start: sessionStart._time)\n  |> filter(fn: (r) => r._measurement == \"tire_allocation\" and r._field == \"sets\")\n  |> last()\n  |> keep(columns: [\"_value\", \"compound\"])\n  |> pivot(rowKey: [], columnKey: [\"compound\"], valueColumn: \"_value\")"
+        }
+      ],
+      "id": 21
+    },
+    {
+      "type": "row",
+      "title": "\ud83d\uddfa\ufe0f Strategy Comparison",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 47
+      },
+      "panels": [],
+      "id": 22
+    },
+    {
+      "title": "Strategy Comparison \u2014 AI Plan vs Actual (by Stint)",
+      "description": "Side-by-side stint comparison. Red=SOFT, Yellow=MEDIUM, White=HARD, Green=INTER, Blue=WET.",
+      "type": "table",
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 48
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "pitwall-influxdb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "center",
+            "cellOptions": {
+              "type": "color-background",
+              "mode": "basic"
+            },
+            "inspect": false,
+            "filterable": false
+          },
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "SOFT": {
+                  "color": "#FF1E1E",
+                  "index": 0,
+                  "text": "SOFT"
+                },
+                "MED": {
+                  "color": "#FFD700",
+                  "index": 1,
+                  "text": "MED"
+                },
+                "HARD": {
+                  "color": "#E5E7EB",
+                  "index": 2,
+                  "text": "HARD"
+                },
+                "INTER": {
+                  "color": "#10B981",
+                  "index": 3,
+                  "text": "INTER"
+                },
+                "WET": {
+                  "color": "#3B82F6",
+                  "index": 4,
+                  "text": "WET"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Strategy"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 120
+              },
+              {
+                "id": "custom.align",
+                "value": "left"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "auto"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": []
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "S1 Laps"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "auto"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": []
+              },
+              {
+                "id": "custom.width",
+                "value": 110
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "S2 Laps"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "auto"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": []
+              },
+              {
+                "id": "custom.width",
+                "value": 110
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "S3 Laps"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "auto"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": []
+              },
+              {
+                "id": "custom.width",
+                "value": 110
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "S4 Laps"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "auto"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": []
+              },
+              {
+                "id": "custom.width",
+                "value": 110
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "S5 Laps"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "auto"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": []
+              },
+              {
+                "id": "custom.width",
+                "value": 110
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "S6 Laps"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "auto"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": []
+              },
+              {
+                "id": "custom.width",
+                "value": 110
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "showHeader": true,
+        "cellHeight": "lg",
+        "footer": {
+          "show": false,
+          "reducer": [
+            "sum"
+          ],
+          "countRows": false,
+          "fields": ""
+        },
+        "sortBy": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "latest = from(bucket: \"f1\")\n  |> range(start: -7d)\n  |> filter(fn: (r) => r._measurement == \"briefing\" and r._field == \"text\")\n  |> group() |> sort(columns: [\"_time\"], desc: true) |> limit(n: 1)\n  |> findRecord(fn: (key) => true, idx: 0)\nrunStartRec = from(bucket: \"f1\")\n  |> range(start: -7d)\n  |> filter(fn: (r) => r._measurement == \"briefing\" and r._field == \"lap\" and r._value == 1.0 and r.driver == latest.driver and r.track == latest.track)\n  |> group() |> sort(columns: [\"_time\"], desc: true) |> limit(n: 1)\n  |> findRecord(fn: (key) => true, idx: 0)\n\nranked = from(bucket: \"f1\")\n  |> range(start: runStartRec._time)\n  |> filter(fn: (r) => r._measurement == \"stint_timeline\" and r.driver == latest.driver and r.track == latest.track)\n  |> pivot(rowKey: [\"_time\",\"source\",\"stint_index\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> group(columns: [\"source\",\"stint_index\"])\n  |> last(column: \"compound\")\n  |> group(columns: [\"source\"])\n  |> sort(columns: [\"lap_start\"])\n  |> map(fn: (r) => ({r with _seed: 1}))\n  |> cumulativeSum(columns: [\"_seed\"])\n\ncompounds = ranked\n  |> map(fn: (r) => ({\n        strategy: if r.source == \"ai\" then \"AI Plan\" else \"Actual\",\n        col: \"S\" + string(v: r._seed),\n        val:\n          if r.compound == \"INTERMEDIATE\" then \"INTER\"\n          else if r.compound == \"MEDIUM\" then \"MED\"\n          else r.compound,\n        sort_key: r._seed * 2 - 1\n     }))\n\nlaps = ranked\n  |> map(fn: (r) => ({\n        strategy: if r.source == \"ai\" then \"AI Plan\" else \"Actual\",\n        col: \"S\" + string(v: r._seed) + \" Laps\",\n        val: \"L\" + string(v: r.lap_start) + \"-\" + string(v: r.lap_end),\n        sort_key: r._seed * 2\n     }))\n\nunion(tables: [compounds, laps])\n  |> group()\n  |> pivot(rowKey: [\"strategy\"], columnKey: [\"col\"], valueColumn: \"val\")"
+        }
+      ],
+      "id": 23,
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {
+              "strategy": 0,
+              "S1": 1,
+              "S1 Laps": 2,
+              "S2": 3,
+              "S2 Laps": 4,
+              "S3": 5,
+              "S3 Laps": 6,
+              "S4": 7,
+              "S4 Laps": 8,
+              "S5": 9,
+              "S5 Laps": 10,
+              "S6": 11,
+              "S6 Laps": 12
+            },
+            "renameByName": {
+              "strategy": "Strategy"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "row",
+      "title": "\ud83c\udfc6 Race Result",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 55
+      },
+      "panels": [],
+      "id": 24
+    },
+    {
+      "title": "Actual Finish",
+      "type": "stat",
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 0,
+        "y": 56
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "pitwall-influxdb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 4
+              },
+              {
+                "color": "orange",
+                "value": 8
+              },
+              {
+                "color": "red",
+                "value": 11
+              }
+            ]
+          },
+          "unit": "none",
+          "decimals": 0,
+          "noValue": "\u2014"
+        }
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "latest = from(bucket: \"f1\")\n  |> range(start: -7d)\n  |> filter(fn: (r) => r._measurement == \"briefing\" and r._field == \"text\")\n  |> group() |> sort(columns: [\"_time\"], desc: true) |> limit(n: 1)\n  |> findRecord(fn: (key) => true, idx: 0)\nrunStartRec = from(bucket: \"f1\")\n  |> range(start: -7d)\n  |> filter(fn: (r) => r._measurement == \"briefing\" and r._field == \"lap\" and r._value == 1.0 and r.driver == latest.driver and r.track == latest.track)\n  |> group() |> sort(columns: [\"_time\"], desc: true) |> limit(n: 1)\n  |> findRecord(fn: (key) => true, idx: 0)\n\nfrom(bucket: \"f1\")\n  |> range(start: runStartRec._time)\n  |> filter(fn: (r) => r._measurement == \"race_result\" and r._field == \"finish_position\" and r.driver == latest.driver and r.track == latest.track)\n  |> group() |> sort(columns: [\"_time\"], desc: true) |> limit(n: 1)\n  |> keep(columns: [\"_time\", \"_value\"])"
+        }
+      ],
+      "id": 25
+    },
+    {
+      "title": "Est. AI Finish",
+      "type": "stat",
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 4,
+        "y": 56
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "pitwall-influxdb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              },
+              {
+                "color": "yellow",
+                "value": 4
+              },
+              {
+                "color": "orange",
+                "value": 8
+              }
+            ]
+          },
+          "unit": "none",
+          "decimals": 0,
+          "noValue": "\u2014"
+        }
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "latest = from(bucket: \"f1\")\n  |> range(start: -7d)\n  |> filter(fn: (r) => r._measurement == \"briefing\" and r._field == \"text\")\n  |> group() |> sort(columns: [\"_time\"], desc: true) |> limit(n: 1)\n  |> findRecord(fn: (key) => true, idx: 0)\nrunStartRec = from(bucket: \"f1\")\n  |> range(start: -7d)\n  |> filter(fn: (r) => r._measurement == \"briefing\" and r._field == \"lap\" and r._value == 1.0 and r.driver == latest.driver and r.track == latest.track)\n  |> group() |> sort(columns: [\"_time\"], desc: true) |> limit(n: 1)\n  |> findRecord(fn: (key) => true, idx: 0)\n\nfrom(bucket: \"f1\")\n  |> range(start: runStartRec._time)\n  |> filter(fn: (r) => r._measurement == \"race_result\" and r._field == \"estimated_ai_finish\" and r.driver == latest.driver and r.track == latest.track)\n  |> group() |> sort(columns: [\"_time\"], desc: true) |> limit(n: 1)\n  |> keep(columns: [\"_time\", \"_value\"])"
+        }
+      ],
+      "id": 26
+    },
+    {
+      "title": "Positions Gained",
+      "type": "stat",
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 8,
+        "y": 56
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "pitwall-influxdb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "none",
+          "decimals": 0,
+          "noValue": "0"
+        }
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "latest = from(bucket: \"f1\")\n  |> range(start: -7d)\n  |> filter(fn: (r) => r._measurement == \"briefing\" and r._field == \"text\")\n  |> group() |> sort(columns: [\"_time\"], desc: true) |> limit(n: 1)\n  |> findRecord(fn: (key) => true, idx: 0)\nrunStartRec = from(bucket: \"f1\")\n  |> range(start: -7d)\n  |> filter(fn: (r) => r._measurement == \"briefing\" and r._field == \"lap\" and r._value == 1.0 and r.driver == latest.driver and r.track == latest.track)\n  |> group() |> sort(columns: [\"_time\"], desc: true) |> limit(n: 1)\n  |> findRecord(fn: (key) => true, idx: 0)\n\nactualRec = from(bucket: \"f1\")\n  |> range(start: runStartRec._time)\n  |> filter(fn: (r) => r._measurement == \"race_result\" and r._field == \"finish_position\" and r.driver == latest.driver and r.track == latest.track)\n  |> group() |> sort(columns: [\"_time\"], desc: true) |> limit(n: 1)\n  |> findRecord(fn: (key) => true, idx: 0)\naiRec = from(bucket: \"f1\")\n  |> range(start: runStartRec._time)\n  |> filter(fn: (r) => r._measurement == \"race_result\" and r._field == \"estimated_ai_finish\" and r.driver == latest.driver and r.track == latest.track)\n  |> group() |> sort(columns: [\"_time\"], desc: true) |> limit(n: 1)\n  |> findRecord(fn: (key) => true, idx: 0)\n\nfrom(bucket: \"f1\")\n  |> range(start: runStartRec._time)\n  |> filter(fn: (r) => r._measurement == \"race_result\" and r._field == \"finish_position\" and r.driver == latest.driver and r.track == latest.track)\n  |> group() |> last()\n  |> map(fn: (r) => ({ r with _value: int(v: actualRec._value) - int(v: aiRec._value) }))\n  |> keep(columns: [\"_time\",\"_value\"])"
+        }
+      ],
+      "id": 27
+    },
+    {
+      "title": "Final \u0394 (AI vs Actual)",
+      "type": "stat",
+      "gridPos": {
+        "h": 5,
+        "w": 5,
+        "x": 12,
+        "y": 56
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "pitwall-influxdb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": -1
+              },
+              {
+                "color": "green",
+                "value": 0.1
+              }
+            ]
+          },
+          "unit": "s",
+          "decimals": 1,
+          "noValue": "0.0"
+        }
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "latest = from(bucket: \"f1\")\n  |> range(start: -7d)\n  |> filter(fn: (r) => r._measurement == \"briefing\" and r._field == \"text\")\n  |> group() |> sort(columns: [\"_time\"], desc: true) |> limit(n: 1)\n  |> findRecord(fn: (key) => true, idx: 0)\nrunStartRec = from(bucket: \"f1\")\n  |> range(start: -7d)\n  |> filter(fn: (r) => r._measurement == \"briefing\" and r._field == \"lap\" and r._value == 1.0 and r.driver == latest.driver and r.track == latest.track)\n  |> group() |> sort(columns: [\"_time\"], desc: true) |> limit(n: 1)\n  |> findRecord(fn: (key) => true, idx: 0)\n\nfrom(bucket: \"f1\")\n  |> range(start: runStartRec._time)\n  |> filter(fn: (r) => r._measurement == \"race_result\" and r._field == \"final_delta_seconds\" and r.driver == latest.driver and r.track == latest.track)\n  |> group() |> sort(columns: [\"_time\"], desc: true) |> limit(n: 1)\n  |> keep(columns: [\"_time\", \"_value\"])"
+        }
+      ],
+      "id": 28
+    },
+    {
+      "title": "Pit Stop \u0394",
+      "description": "Actual pit stops minus AI pit stops. Positive = actual pitted more than AI plan.",
+      "type": "stat",
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 17,
+        "y": 56
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "pitwall-influxdb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#9CA3AF"
+          },
+          "unit": "none",
+          "decimals": 0,
+          "noValue": "0"
+        }
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "latest = from(bucket: \"f1\")\n  |> range(start: -7d)\n  |> filter(fn: (r) => r._measurement == \"briefing\" and r._field == \"text\")\n  |> group() |> sort(columns: [\"_time\"], desc: true) |> limit(n: 1)\n  |> findRecord(fn: (key) => true, idx: 0)\nrunStartRec = from(bucket: \"f1\")\n  |> range(start: -7d)\n  |> filter(fn: (r) => r._measurement == \"briefing\" and r._field == \"lap\" and r._value == 1.0 and r.driver == latest.driver and r.track == latest.track)\n  |> group() |> sort(columns: [\"_time\"], desc: true) |> limit(n: 1)\n  |> findRecord(fn: (key) => true, idx: 0)\n\nfrom(bucket: \"f1\")\n  |> range(start: runStartRec._time)\n  |> filter(fn: (r) => r._measurement == \"race_result\" and r._field == \"pit_diff\" and r.driver == latest.driver and r.track == latest.track)\n  |> group() |> sort(columns: [\"_time\"], desc: true) |> limit(n: 1)\n  |> keep(columns: [\"_time\", \"_value\"])"
+        }
+      ],
+      "id": 29
+    },
+    {
+      "title": "Verdict",
+      "type": "stat",
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 21,
+        "y": 56
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "pitwall-influxdb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "AI FASTER": {
+                  "color": "green",
+                  "index": 0,
+                  "text": "\u2705 AI WINS"
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "ACTUAL FASTER": {
+                  "color": "red",
+                  "index": 1,
+                  "text": "\u274c ACTUAL WINS"
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "EQUAL": {
+                  "color": "blue",
+                  "index": 2,
+                  "text": "= EQUAL"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          },
+          "noValue": "\u2014"
+        }
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/.*[Vv]alue.*/",
+          "values": false
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "latest = from(bucket: \"f1\")\n  |> range(start: -7d)\n  |> filter(fn: (r) => r._measurement == \"briefing\" and r._field == \"text\")\n  |> group() |> sort(columns: [\"_time\"], desc: true) |> limit(n: 1)\n  |> findRecord(fn: (key) => true, idx: 0)\nrunStartRec = from(bucket: \"f1\")\n  |> range(start: -7d)\n  |> filter(fn: (r) => r._measurement == \"briefing\" and r._field == \"lap\" and r._value == 1.0 and r.driver == latest.driver and r.track == latest.track)\n  |> group() |> sort(columns: [\"_time\"], desc: true) |> limit(n: 1)\n  |> findRecord(fn: (key) => true, idx: 0)\n\nfrom(bucket: \"f1\")\n  |> range(start: runStartRec._time)\n  |> filter(fn: (r) => r._measurement == \"race_result\" and r._field == \"verdict\" and r.driver == latest.driver and r.track == latest.track)\n  |> group() |> sort(columns: [\"_time\"], desc: true) |> limit(n: 1)\n  |> keep(columns: [\"_time\", \"_value\"])"
+        }
+      ],
+      "id": 30
+    },
+    {
+      "type": "row",
+      "title": "\ud83c\udf99\ufe0f Post-Race Debrief",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 61
+      },
+      "panels": [],
+      "id": 31
+    },
+    {
+      "title": "AI Race Engineer \u2014 Full Race Debrief",
+      "description": "A full narrative breakdown of the race from the AI strategist.",
+      "type": "stat",
+      "gridPos": {
+        "h": 14,
+        "w": 24,
+        "x": 0,
+        "y": 62
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "pitwall-influxdb"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "#1F2937"
+          },
+          "noValue": "Race debrief will appear here when the race finishes."
+        }
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "textMode": "value",
+        "wideLayout": true,
+        "text": {
+          "valueSize": 16
+        },
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/.*[Vv]alue.*/",
+          "values": false
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "import \"strings\"\n\nlatest = from(bucket: \"f1\")\n  |> range(start: -7d)\n  |> filter(fn: (r) => r._measurement == \"briefing\" and r._field == \"text\")\n  |> group() |> sort(columns: [\"_time\"], desc: true) |> limit(n: 1)\n  |> findRecord(fn: (key) => true, idx: 0)\nrunStartRec = from(bucket: \"f1\")\n  |> range(start: -7d)\n  |> filter(fn: (r) => r._measurement == \"briefing\" and r._field == \"lap\" and r._value == 1.0 and r.driver == latest.driver and r.track == latest.track)\n  |> group() |> sort(columns: [\"_time\"], desc: true) |> limit(n: 1)\n  |> findRecord(fn: (key) => true, idx: 0)\n\nfrom(bucket: \"f1\")\n  |> range(start: runStartRec._time)\n  |> filter(fn: (r) => r._measurement == \"debrief\" and r._field == \"text\" and r.driver == latest.driver and r.track == latest.track)\n  |> group() |> sort(columns: [\"_time\"], desc: true) |> limit(n: 1)\n  |> map(fn: (r) => ({ r with _value:\n      strings.replaceAll(v:\n        strings.replaceAll(v:\n          strings.replaceAll(v: r._value, t: \"**\", u: \"\"),\n          t: \"  \", u: \" \"),\n        t: \"\\n\\n\\n\", u: \"\\n\\n\")\n  }))\n  |> keep(columns: [\"_time\", \"_value\"])"
+        }
+      ],
+      "id": 32
+    },
+    {
+      "id": 33,
+      "type": "xychart",
+      "title": "Lap Times \u2014 AI vs Actual (by Lap)",
+      "gridPos": {
+        "h": 8,
+        "w": 16,
+        "x": 0,
+        "y": 39
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "pitwall-influxdb"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "latest = from(bucket: \"f1\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"briefing\" and r._field == \"text\")\n  |> group()\n  |> sort(columns: [\"_time\"], desc: true)\n  |> limit(n: 1)\n  |> findRecord(fn: (key) => true, idx: 0)\nrunStartRec = from(bucket: \"f1\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"briefing\" and r._field == \"lap\" and r._value == 1.0 and r.driver == latest.driver and r.track == latest.track)\n  |> group()\n  |> sort(columns: [\"_time\"], desc: true)\n  |> limit(n: 1)\n  |> findRecord(fn: (key) => true, idx: 0)\nfrom(bucket: \"f1\")\n  |> range(start: runStartRec._time)\n  |> filter(fn: (r) => r._measurement == \"lap_time\" and r.driver == latest.driver and r.track == latest.track)\n  |> pivot(rowKey: [\"_time\",\"source\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> group(columns: [\"source\",\"lap\"])\n  |> last(column: \"duration\")\n  |> group()\n  |> pivot(rowKey: [\"lap\"], columnKey: [\"source\"], valueColumn: \"duration\")\n  |> sort(columns: [\"lap\"])\n  |> map(fn: (r) => ({ lap: r.lap, ai: r.ai, actual: r.actual }))"
+        }
+      ],
+      "options": {
+        "mapping": "auto",
+        "series": [],
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "show": "lines",
+            "pointSize": {
+              "fixed": 5
+            },
+            "lineWidth": 2,
+            "fillOpacity": 0,
+            "axisPlacement": "auto",
+            "axisColorMode": "text",
+            "axisLabel": "Lap Time (mm:ss)",
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "axisCenteredZero": false,
+            "hideFrom": {
+              "tooltip": false,
+              "viz": false,
+              "legend": false
+            }
+          },
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "unit": "dthms",
+          "decimals": 2,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "lap"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "displayName",
+                "value": "Lap"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "Lap"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "actual"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Actual"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ai"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "AI"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "orange"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "transformations": []
+    }
+  ]
+}
